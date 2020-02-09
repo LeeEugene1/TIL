@@ -1,2 +1,2 @@
 # TIL
-today I learn
+today I learn about JavaScript
