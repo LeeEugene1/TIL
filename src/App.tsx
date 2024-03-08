@@ -1,38 +1,36 @@
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import React, { useReducer, useState } from "react";
 import logo from "./logo.svg";
 import "./App.css";
+import UseLayoutEffect from "./UseLayoutEffect";
 
-interface DemoProps {}
-
-const userIds = ["admin", "b", "c"];
-
-function App({}: DemoProps) {
-  const [userId, setUserId] = useState(userIds[0]);
-  const [isAdmin, setIsAdmin] = useState(true);
-
-  //slow down rendering
-  let now = performance.now();
-  while (performance.now() - now < 300) {
-    //doing nothing for a bit
-  }
-
-  //useEffect는 비동기라서 userId(느림)보다 isAdmin(더느림)을 따로보여줌, 렌더링후
-  //useLayoutEffect는 동시에 결과를 보여줌(더느림속도), 동기적, 랜더링전(화면이 보여지기전 일부 조작이 필요한경우)
-  useLayoutEffect(() => {
-    setIsAdmin(userId === userIds[0]);
-  }, [userId]);
-
-  const handleChange = () => {
-    debugger;
-    const otherId = userIds.find((id: any) => id !== userId)!; //현재값과 다른 아이디를 보여줌
-    setUserId(otherId);
+function App() {
+  //reducer가 필요한이유: useState가 너무많을때 줄일 수 있음. 리덕스 action 처럼 사용가능
+  const reducer = (state: any, action: any) => {
+    switch (action.type) {
+      case "increment":
+        return { count: state.count + 1 };
+      case "decrement":
+        return { count: state.count - 1 };
+      case "reset":
+        return { count: 0 };
+      default:
+        throw new Error();
+    }
   };
+
+  // const [count, setCount] = useState(0);
+  // const [count, setCount] = useReducer((prev: any, next: any) => next, 0); //새로오는 값 next는 count + 1
+  const [state, dispatch] = useReducer(reducer, { count: 0 }); //새로오는 값 next는 count + 1
 
   return (
     <>
-      <p>userId: {userId}</p>
-      <p>Admin: {isAdmin ? "true" : "false"}</p>
-      <button onClick={handleChange}>Change user</button>
+      {/* {count}
+      <button onClick={() => setCount(count + 1)}>Increment</button> */}
+      {state.count}
+      <button onClick={() => dispatch({ type: "increment" })}>Increment</button>
+      <button onClick={() => dispatch({ type: "decrement" })}>Decrement</button>
+      <button onClick={() => dispatch({ type: "reset" })}>Reset</button>
+      {/* <UseLayoutEffect /> */}
     </>
   );
 }
