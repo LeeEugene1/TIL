@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`maches snapshot 1`] = `
+<ul>
+  <li
+    data-testid="todo-1"
+  >
+    <em>
+      유진
+    </em>
+  </li>
+</ul>
+`;
